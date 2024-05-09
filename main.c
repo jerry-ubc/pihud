@@ -1,50 +1,78 @@
-#include <stdio.h>  // Standard input/output definitions
-#include <stdlib.h> // Standard library functions
-#include <string.h> // String handling functions
-// #include <libserialport.h> // Serial port handling library
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <libserialport.h>
+#include <fcntl.h>
+#include <unistd.h>
+// #include <linux/i2c-dev.h>
+#include <sys/ioctl.h>
+
+// Function to initialize the serial port
+struct sp_port* init_serial(const char *port_name) {
+    struct sp_port *port;
+    sp_get_port_by_name(port_name, &port);
+    sp_open(port, SP_MODE_READ_WRITE);
+    sp_set_baudrate(port, 9600);
+    sp_set_bits(port, 8);
+    sp_set_parity(port, SP_PARITY_NONE);
+    sp_set_stopbits(port, 1);
+    sp_set_flowcontrol(port, SP_FLOWCONTROL_NONE);
+    return port;
+}
+
+//Send OBD command and read response
+void send_obd_command(struct sp_port *port, const char *cmd) {
+    sp_blocking_write(port, cmd, strlen(cmd), 1000);
+    char buf[128];
+    int bytes_read = sp_blocking_read(port, buf, sizeof(buf) - 1, 2000);
+    buf[bytes_read] = '\0';
+    printf("Response: %s\n", buf);
+}
+
+//Initializes OLED display
+int init_oled(const char *filename, int address) {
+    int file;
+    if ((file = open(filename, O_RDWR)) < 0) {
+        perror("Failed to open the i2c bus");
+        exit(1);
+    }
+    // if (ioctl(file, I2C_SLAVE, address) < 0) {
+    //     perror("Failed to acquire bus access and/or talk to slave.");
+    //     exit(1);
+    // }
+    return file;
+}
+
+//Display messages on the OLED
+void display_on_oled(int file, const char *message) {
+    write(file, message, strlen(message));  // Simplified for example
+}
 
 int main() {
-    struct sp_port *port; // Declare a pointer to a serial port structure
-    char *port_name = "/dev/ttyUSB0"; // Serial port device file (adjust as necessary for your setup)
+    //part 1: Initialize serial port for OBD-II
+    struct sp_port *port = init_serial("/dev/ttyUSB0");
 
-    // Try to get the serial port by its name (e.g., "/dev/ttyUSB0")
-    // enum sp_return result = sp_get_port_by_name(port_name, &port);
-    // if (result != SP_OK) {
-    //     fprintf(stderr, "Error finding serial port\n"); // If there's an error, print it
-    //     return -1; // Exit the program with an error code
-    // }
+    // Test each component separately:
+    // To test the serial communication, uncomment the following lines one at a time:
+    // send_obd_command(port, "ATZ\r");  //reset command, check device response
+    // send_obd_command(port, "010C\r"); //engine RPM
+    // send_obd_command(port, "010D\r"); //vehicle speed
+    // send_obd_command(port, "0105\r"); //coolant temp
 
-    // sp_open(port, SP_MODE_READ);
+    //part 2: Initialize OLED display
+    int oled_file = init_oled("/dev/i2c-1", 0x3C);  //TODO: adjust I2C address if necessary
 
-    //9600 bps is common for many OBD adapters TODO: double check
-    sp_set_baudrate(port, 9600);
+    //to test OLED
+    // display_on_oled(oled_file, "TEST");
 
-    sp_set_bits(port, 8);
+    // Full Integration Testing (after individual tests pass):
+    // Comment out the tests and uncomment below to integrate OBD-II read with OLED display
+    // send_obd_command(port, "010C\r");  // Uncomment this and adjust to display on OLED
 
-    //parity commonly None in OBD TODO: double check
-    // sp_set_parity(port, SP_PARITY_NONE);
-
-    // Set the number of stop bits used to 1 (standard in many serial communications)
-    sp_set_stopbits(port, 1);
-
-    //disable flow control as not typically used for OBD
-    // sp_set_flowcontrol(port, SP_FLOWCONTROL_NONE);
-
-    //send command to OBD port
-    // "ATZ\r" is a command to reset the OBD adapter to its defaults
-    const char *cmd = "ATZ\r"; 
-    sp_blocking_write(port, cmd, strlen(cmd), 1000); // Write the command, waiting up to 1000 ms
-
-    //buffer reads the response
-    char buf[1024];
-    int bytes_read = sp_blocking_read(port, buf, sizeof(buf)-1, 2000); //read response, wait up to 2000ms
-    buf[bytes_read] = '\0';
-
-    printf("Received: %s\n", buf);
-
-    //close serial port and free associated resources
+    //close serial port and OLED file descriptor
     sp_close(port);
     sp_free_port(port);
+    close(oled_file);
 
     return 0;
 }
