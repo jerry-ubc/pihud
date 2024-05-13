@@ -22,11 +22,25 @@ to reverse engineer it myself.
 ### Hardware System ###
 The brains of the project is a Raspberry Pi Zero 2W. Eventually, I will use an OLED to project the 
 information onto the windshield. If the project seems hopeful and I am able to establish a connection with
-the ODB adapter, then I will look into options for implementing a transceiver to communicate wirelessly.
+the ODB adapter, then I will look into options for implementing a transceiver to communicate wirelessly.  
 
 ## Hardware Setup ##
 __Raspberry Pi Zero 2W__: Runs the code for extracting and displaying the information from the vehicle.
 TODO
 ## Software Setup ##
 TODO
+
+## Bugs Encountered ##
+If you are also using a Pi Zero, you may run into issues running `sudo apt update` (specifically freezing
+the device while "Reading changelogs... XX%", which may be a result of the swap space size. I was able to
+fix this by running the following commands:
+```
+sudo dphys-swapfile swapoff
+sudo nano /etc/dphys-swapfile
+```
+Then modify the line to `CONF_SWAPSIZE=1024`.
+```
+sudo dphys-swapfile setup
+sudo dphys-swapfile swapon
+```
 
