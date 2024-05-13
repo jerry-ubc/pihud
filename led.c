@@ -12,7 +12,6 @@ int readLED(const char *path, const char *filename) {
     char value[10]; //TODO: WHY 10
 
     int fd = open(fullPath, O_RDONLY);
-    printf("middle2\n");
     if (fd == -1) {
         fprintf(stderr, "Failed to open %s for reading\n", fullPath);
         perror("Error");
