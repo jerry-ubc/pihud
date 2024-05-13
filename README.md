@@ -25,7 +25,9 @@ information onto the windshield. If the project seems hopeful and I am able to e
 the ODB adapter, then I will look into options for implementing a transceiver to communicate wirelessly.  
 
 ## Hardware Setup ##
-__Raspberry Pi Zero 2W__: Runs the code for extracting and displaying the information from the vehicle.
+__Raspberry Pi Zero 2W__
+__Breadboard__
+__OLED Display__
 TODO
 ## Software Setup ##
 TODO
