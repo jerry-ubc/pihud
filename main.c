@@ -7,6 +7,11 @@
 #include <linux/i2c-dev.h>
 #include <sys/ioctl.h>
 
+#include "led.h"
+
+#define MAX_BRIGHTNESS 255
+#define IS_LED_ON(brightness) ((brightness) > 0 ? 1 : 0)
+
 //Initialize serial port
 // struct sp_port* init_serial(const char *port_name) {
 //     struct sp_port *port;
@@ -51,7 +56,13 @@
 int main() {
     // struct sp_port *port = init_serial("/dev/ttyUSB0");
 
-    printf("Hello world!\n");
+    const char *ledBasePath = "/sys/class/leds/ACT";
+    if (IS_LED_ON(readLED(ledBasePath, "brightness"))) {
+        writeLED(ledBasePath, "brightness", "0");
+    }
+    else {
+        writeLED(ledBasePath, "brightness", "1");
+    }
 
     // Test each component separately:
     // To test the serial communication, uncomment the following lines one at a time:
