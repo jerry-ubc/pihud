@@ -46,3 +46,12 @@ sudo dphys-swapfile setup
 sudo dphys-swapfile swapon
 ```
 
+## Design Decisions ##
+### OBD-II vs. CAN Bus ###
+TODO
+### OLED vs. LCD Display ###
+Organic LEDs (OLEDs) tend to provide better picture quality (e.g., greater contrast, deeper blacks, etc.).
+Furthermore, OLEDs are able to maintain their picture quality at a much greater viewing angle due to its
+nature of having true blacks. However, they come with the side effect lower lifespan and potentially 
+imprinting images into the display if lit for extended durations.
+Liquid Crystal Displays (LCDs) on the other hand, tend do 
