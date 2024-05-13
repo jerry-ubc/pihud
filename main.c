@@ -51,7 +51,7 @@
 int main() {
     // struct sp_port *port = init_serial("/dev/ttyUSB0");
 
-    prinf("Hello world!\n");
+    printf("Hello world!\n");
 
     // Test each component separately:
     // To test the serial communication, uncomment the following lines one at a time:
