@@ -8,7 +8,8 @@ windshield.
 Additional LEDs to show status such as: working, firmware crash, vehicle speed to high, etc. Potentially
 implement the camera to detect school zones and display an image representing that. See where you can
 leverage multiple cores and utilize sleeping instead of delaying. Could also add a speaker to play sound
-effects or alerts when danger is detected.
+effects or alerts when danger is detected. Could also add a power button to turn the device on/off, or
+toggle power saving mode, or halt all operations.
 
 ## Methodology ##
 ### Vehicle Interface ###
