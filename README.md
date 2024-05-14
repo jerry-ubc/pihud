@@ -4,12 +4,10 @@ powered by a Raspberry Pi Zero 2W and connected through the car's OBD-II port. T
 vehicle information such as engine speed, vehicle speed, and other diagnostic data directly on the car's 
 windshield.
 
-## Features ##
-__Real-Time Speed Display__: Shows the current speed of the vehicle.  
-__Engine RPM__: Displays the revolutions per minute of the vehicle's engine.  
-__Diagnostic Data__: Access and display various diagnostic data points provided by the vehicle's OBD-II 
-system.  
-__Customizable Layout__: Easily modify the layout and data points displayed on the HUD.  
+## Feature Considerations ## 
+Additional LEDs to show status such as: working, firmware crash, vehicle speed to high, etc. Potentially
+implement the camera to detect school zones and display an image representing that. See where you can
+leverage multiple cores and utilize sleeping instead of delaying.
 
 ## Methodology ##
 ### Vehicle Interface ###
