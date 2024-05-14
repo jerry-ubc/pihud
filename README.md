@@ -7,7 +7,8 @@ windshield.
 ## Feature Considerations ## 
 Additional LEDs to show status such as: working, firmware crash, vehicle speed to high, etc. Potentially
 implement the camera to detect school zones and display an image representing that. See where you can
-leverage multiple cores and utilize sleeping instead of delaying.
+leverage multiple cores and utilize sleeping instead of delaying. Could also add a speaker to play sound
+effects or alerts when danger is detected.
 
 ## Methodology ##
 ### Vehicle Interface ###
