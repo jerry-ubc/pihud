@@ -24,14 +24,14 @@ int main() {
         //     transmit_speed_alert();
         // }
         toggleLED(main_led);
-        delay(500);  //delay for 1 second between updates
+        delay(1000);  //delay for 1 second between updates
     }
     return 0;
 }
 
 void delay(int milliseconds) {
     struct timespec ts;
-    ts.tv_sec = milliseconds / 1000;          //milliseconds to seconds
+    ts.tv_sec = milliseconds / 1000;                //milliseconds to seconds
     ts.tv_nsec = (milliseconds % 1000) * 1000000L;  //remainder to nanoseconds
 
     nanosleep(&ts, NULL);
