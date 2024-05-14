@@ -5,6 +5,7 @@
 #include <string.h>
 
 #include "led.h"
+#include "config.h"
 
 int readLED(const char *path, const char *filename) {
     char fullPath[128]; //TODO: why 128, stop with magic numbers
@@ -47,23 +48,11 @@ void writeLED(const char *path, const char *filename, const char *value) {
     close(fd);
 }
 
-// int main(int argc, char *argv[]) {
-//     if (argc < 3) {
-//         fprintf(stderr, "Usage: %s <brightness|trigger> <value>\n", argv[0]);
-//         return 1;
-//     }
-
-//     const char *ledBasePath = "/sys/class/leds/ACT";  // Change to your specific LED path if different
-
-//     // Choosing action based on the command-line argument
-//     if (strcmp(argv[1], "brightness") == 0) {
-//         writeLED(ledBasePath, "brightness", argv[2]);
-//     } else if (strcmp(argv[1], "trigger") == 0) {
-//         writeLED(ledBasePath, "trigger", argv[2]);
-//     } else {
-//         fprintf(stderr, "Invalid command. Use 'brightness' or 'trigger'.\n");
-//         return 1;
-//     }
-
-//     return 0;
-// }
+void toggleLED(const char *led_path) {
+    if (IS_LED_ON(readLED(led_path, "brightness"))) {
+        writeLED(led_path, "brightness", "0");
+    }
+    else {
+        writeLED(led_path, "brightness", "1");
+    }
+}

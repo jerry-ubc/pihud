@@ -1,0 +1,1 @@
+const char *main_led = "/sys/class/leds/ACT";
