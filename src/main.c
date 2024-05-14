@@ -12,21 +12,36 @@
 #include "config.h"
 
 //Function declarations
+void initialize_components();
+void display_startup_message();
+void update_display();
+void speed_alert();
 void delay(int milliseconds);
 
 int main() {
-    // initialize_system();
-    // display_startup_message();
+    initialize_components();
+    display_startup_message();
     
     while (1) {
-        // update_display_with_vehicle_data();
-        // if (check_vehicle_speed_threshold()) {
-        //     transmit_speed_alert();
-        // }
+        update_display();
+        speed_alert();
         toggleLED(main_led);
         delay(1000);  //delay for 1 second between updates
     }
     return 0;
+}
+
+void initialize_components() {
+    return;
+}
+void display_startup_message() {
+    return;
+}
+void update_display() {
+    return;
+}
+void speed_alert() {
+    return;
 }
 
 void delay(int milliseconds) {
