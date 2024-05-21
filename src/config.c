@@ -1,1 +1,1 @@
-const char *main_led = "/sys/class/leds/ACT";
+const char *main_led = "/sys/class/leds/ACT"; //TODO: should this be here? i thought config only needs config.h
