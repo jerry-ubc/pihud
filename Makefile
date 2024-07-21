@@ -1,7 +1,8 @@
 CC=gcc
 CFLAGS=-Iinclude -Ilibssd1306/include
-LDFLAGS=-Llibssd1306/src/.libs -lssd1306_i2c
-LDFLAGS=-Llibssd1306/src/.libs -lssd1306_i2c -Wl,-rpath,libssd1306/src/.libs
+# LDFLAGS=-Llibssd1306/src/.libs -lssd1306_i2c
+# LDFLAGS=-Llibssd1306/src/.libs -lssd1306_i2c -Wl,-rpath,libssd1306/src/.libs
+LDFLAGS=-Llibssd1306/src/.libs -lssd1306_i2c -lserialport -Wl,-rpath,libssd1306/src/.libs
 OBJDIR=obj
 BINDIR=bin
 
