@@ -127,6 +127,7 @@ void init_serial() {
 }
 
 // To test commands directly, use 'minicom -b 38400 -D /dev/ttyUSB0'
+// To exit minicom, enter Ctrl+A then X
 void send_command(const char *service, const char *cmd) {
     //TODO: sometimes this will return ">AN ERROR 01 11", make sure you handle this case
     //TODO: sometimes will send ">TOPPED"
@@ -136,7 +137,7 @@ void send_command(const char *service, const char *cmd) {
     char command[256];
     sprintf(command, "%s %s\r", service, cmd); // Append carriage return for ELM327 command
     sp_blocking_write(port, command, strlen(command), 1000);
-    usleep(100000); // Delay to ensure ELM327 processes the command
+    // usleep(100000); // Delay to ensure ELM327 processes the command
 
 
     char response[1024];
@@ -148,20 +149,22 @@ void send_command(const char *service, const char *cmd) {
     response[bytes_read] = '\0';
     printf("%s\n", response);
 
-
-    if (strstr(response, ">STOPPED") || strstr(response, ">TOPPED")) {
+    // Error detection
+    if (strstr(response, ">STOPPED")) {
         printf("Device stopped. Attempting to reset...\n");
         send_command("ATZ", "");  // Reset the device if it stopped
         return;
     }
-
-    if (strstr(response, "SEARCHING...")) {
+    else if (strstr(response, "SEARCHING...")) {
         printf("Simulator not found. Ensure the simulator is powered on and connected.\n");
         return;
     }
-
-    if (strstr(response, ">ERROR")) {
+    else if (strstr(response, ">ERROR")) {
         printf("Received error from ELM327. Command may be invalid.\n");
+        return;
+    }
+    else if (strstr(response, ">NO DATA")) {
+        printf("No data available for the requested PID.\n");
         return;
     }
 
@@ -202,6 +205,7 @@ void send_command(const char *service, const char *cmd) {
             break;
     }
 
+    // This solution is more 'elegant', but garbage value in the middle ruins it
     // int args_scanned = sscanf(response, "%x %x %x %x", &prefix, &pid, &garbage, &A);
     // printf("%x\n", prefix);
     // printf("%x\n", pid);
