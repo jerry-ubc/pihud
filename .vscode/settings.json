@@ -2,6 +2,7 @@
     "files.associations": {
         "stdio.h": "c",
         "i2c-dev.h": "c",
-        "ssd1306_graphics.h": "c"
+        "ssd1306_graphics.h": "c",
+        "ioctl.h": "c"
     }
 }

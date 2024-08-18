@@ -1,18 +1,15 @@
-//TODO: remove can-isotp folder and its related git stuff
 #include <stdio.h>
-#include <stdlib.h>
+// #include <stdlib.h>
 #include <string.h>
 #include <libserialport.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <linux/i2c-dev.h>
-#include <sys/ioctl.h>
+// #include <fcntl.h>   //TODO: same
+// #include <unistd.h>m     //TODO: same
+// #include <linux/i2c-dev.h>   //TODO: search up
+// #include <sys/ioctl.h>       //TODO: search up what this does
 #include <time.h>
 #include <errno.h>
-#include <ssd1306_graphics.h>       //TODO: is this even doing anything
 #include <ssd1306_i2c.h>
 #include <ctype.h>
-#include "led.h"
 #include "config.h"
 
 struct sp_port *port;
@@ -119,26 +116,16 @@ void init_serial() {
         sp_free_port(port);
         return;
     }
-
-    // send_command("ATZ", "");    // Reset the device
-    // send_command("ATE0", "");   // Disable echo
-    // send_command("ATL0", "");   // Disable linefeed
-    // send_command("ATSP0", "");  // Set protocol to auto
 }
 
 // To test commands directly, use 'minicom -b 38400 -D /dev/ttyUSB0'
 // To exit minicom, enter Ctrl+A then X
 void send_command(const char *service, const char *cmd) {
-    //TODO: sometimes this will return ">AN ERROR 01 11", make sure you handle this case
-    //TODO: sometimes will send ">TOPPED"
-    //TODO: will send "SEARCHING..." if sim is disconnected but program is running
     //TODO: also make sure you handle the case where the simulator gets turned off after starting connected
     //TODO: also consider making a log for faults so that you can trace what happened
     char command[256];
     sprintf(command, "%s %s\r", service, cmd); // Append carriage return for ELM327 command
     sp_blocking_write(port, command, strlen(command), 1000);
-    // usleep(100000); // Delay to ensure ELM327 processes the command
-
 
     char response[1024];
     int bytes_read = sp_blocking_read(port, response, sizeof(response)-1, 1000);
